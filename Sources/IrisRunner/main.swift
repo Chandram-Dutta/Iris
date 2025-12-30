@@ -1,4 +1,0 @@
-import Iris
-
-print("IrisRunner")
-

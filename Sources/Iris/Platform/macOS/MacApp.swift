@@ -1,0 +1,77 @@
+#if os(macOS)
+import AppKit
+
+@MainActor
+class MacAppDelegate: NSObject, NSApplicationDelegate {
+    weak var macApp: MacApp?
+    
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        return true
+    }
+    
+    func applicationWillTerminate(_ notification: Notification) {
+        macApp?.stop()
+    }
+}
+
+@MainActor
+public class MacApp {
+    private let delegate = MacAppDelegate()
+    public let window: MacWindow
+    private unowned let engine: Engine
+    
+    private var displayLink: CVDisplayLink?
+    
+    public init(engine: Engine) {
+        self.engine = engine
+        window = MacWindow()
+        window.onClose = { [weak self] in
+            self?.stop()
+        }
+        delegate.macApp = self
+    }
+    
+    func run() {
+        let app = NSApplication.shared
+        app.delegate = delegate
+        app.setActivationPolicy(.regular)
+        
+        window.create()
+        window.show()
+        
+        startDisplayLink()
+        
+        app.activate(ignoringOtherApps: true)
+        app.run()
+    }
+    
+    public func stop() {
+        stopDisplayLink()
+        engine.stop()
+    }
+    
+    private func startDisplayLink() {
+        CVDisplayLinkCreateWithActiveCGDisplays(&displayLink)
+        guard let displayLink = displayLink else { return }
+        
+        let callback: CVDisplayLinkOutputCallback = { _, _, _, _, _, userInfo in
+            let app = Unmanaged<MacApp>.fromOpaque(userInfo!).takeUnretainedValue()
+            DispatchQueue.main.async {
+                app.engine.tick()
+            }
+            return kCVReturnSuccess
+        }
+        
+        let userInfo = Unmanaged.passUnretained(self).toOpaque()
+        CVDisplayLinkSetOutputCallback(displayLink, callback, userInfo)
+        CVDisplayLinkStart(displayLink)
+    }
+    
+    private func stopDisplayLink() {
+        guard let displayLink = displayLink else { return }
+        CVDisplayLinkStop(displayLink)
+        self.displayLink = nil
+    }
+}
+#endif
+
