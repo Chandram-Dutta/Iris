@@ -37,17 +37,20 @@ let package = Package(
         .executableTarget(
             name: "Breakout",
             dependencies: ["Iris"],
-            path: "Examples/Breakout"
+            path: "Examples/Breakout",
+            exclude: ["README.md"]
         ),
         .executableTarget(
             name: "Snake",
             dependencies: ["Iris"],
-            path: "Examples/Snake"
+            path: "Examples/Snake",
+            exclude: ["README.md"]
         ),
         .executableTarget(
             name: "SpaceShooter",
             dependencies: ["Iris"],
             path: "Examples/SpaceShooter",
+            exclude: ["README.md"],
             resources: [.copy("Resources")]
         ),
         .testTarget(

@@ -1,5 +1,7 @@
 # Iris
 
+![Space Shooter Demo](Assets/space_shooter.mov)
+
 A minimal 2D game engine in Swift.
 
 ## Philosophy
