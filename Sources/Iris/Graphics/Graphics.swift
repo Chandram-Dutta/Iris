@@ -29,5 +29,7 @@ public struct Color: Sendable {
 public protocol Graphics {
     func clear(_ color: Color)
     func fillRect(x: Float, y: Float, width: Float, height: Float, color: Color)
+    func drawImage(_ image: Image, x: Float, y: Float)
+    func drawText(_ text: String, x: Float, y: Float, font: Font, color: Color)
 }
 

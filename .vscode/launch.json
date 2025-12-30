@@ -1,24 +1,44 @@
 {
     "configurations": [
         {
-            "type": "swift",
+            "type": "lldb",
             "request": "launch",
             "args": [],
             "cwd": "${workspaceFolder:Iris}",
             "name": "Debug IrisRunner",
             "target": "IrisRunner",
             "configuration": "debug",
-            "preLaunchTask": "swift: Build Debug IrisRunner"
+            "preLaunchTask": "swift: Build Debug IrisRunner",
+            "program": "${workspaceFolder:Iris}/.build/debug/IrisRunner"
         },
         {
-            "type": "swift",
+            "type": "lldb",
             "request": "launch",
             "args": [],
             "cwd": "${workspaceFolder:Iris}",
             "name": "Release IrisRunner",
             "target": "IrisRunner",
             "configuration": "release",
-            "preLaunchTask": "swift: Build Release IrisRunner"
+            "preLaunchTask": "swift: Build Release IrisRunner",
+            "program": "${workspaceFolder:Iris}/.build/release/IrisRunner"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Iris}",
+            "name": "Debug Breakout",
+            "program": "${workspaceFolder:Iris}/.build/debug/Breakout",
+            "preLaunchTask": "swift: Build Debug Breakout"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Iris}",
+            "name": "Release Breakout",
+            "program": "${workspaceFolder:Iris}/.build/release/Breakout",
+            "preLaunchTask": "swift: Build Release Breakout"
         }
     ]
 }

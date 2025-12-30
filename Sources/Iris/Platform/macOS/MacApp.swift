@@ -15,14 +15,14 @@ class MacAppDelegate: NSObject, NSApplicationDelegate {
 }
 
 @MainActor
-public class MacApp {
+class MacApp {
     private let delegate = MacAppDelegate()
-    public let window: MacWindow
+    let window: MacWindow
     private unowned let engine: Engine
     
     private var displayLink: CVDisplayLink?
     
-    public init(engine: Engine) {
+    init(engine: Engine) {
         self.engine = engine
         window = MacWindow()
         window.onClose = { [weak self] in
@@ -46,7 +46,7 @@ public class MacApp {
         app.run()
     }
     
-    public func stop() {
+    func stop() {
         stopDisplayLink()
         engine.stop()
     }

@@ -13,6 +13,10 @@ let package = Package(
             name: "IrisRunner",
             targets: ["IrisRunner"]
         ),
+        .executable(
+            name: "Breakout",
+            targets: ["Breakout"]
+        ),
     ],
     targets: [
         .target(
@@ -21,6 +25,11 @@ let package = Package(
         .executableTarget(
             name: "IrisRunner",
             dependencies: ["Iris"]
+        ),
+        .executableTarget(
+            name: "Breakout",
+            dependencies: ["Iris"],
+            path: "Examples/Breakout"
         ),
         .testTarget(
             name: "IrisTests",

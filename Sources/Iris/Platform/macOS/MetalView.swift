@@ -3,17 +3,19 @@ import AppKit
 import QuartzCore
 
 @MainActor
-public class MetalView: NSView {
-    public var metalLayer: CAMetalLayer {
+class MetalView: NSView {
+    var metalLayer: CAMetalLayer {
         return layer as! CAMetalLayer
     }
     
-    public override init(frame frameRect: NSRect) {
+    override var acceptsFirstResponder: Bool { true }
+    
+    override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         setupLayer()
     }
     
-    public required init?(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupLayer()
     }
@@ -23,12 +25,12 @@ public class MetalView: NSView {
         layer = CAMetalLayer()
     }
     
-    public override func setBoundsSize(_ newSize: NSSize) {
+    override func setBoundsSize(_ newSize: NSSize) {
         super.setBoundsSize(newSize)
         updateDrawableSize()
     }
     
-    public override func setFrameSize(_ newSize: NSSize) {
+    override func setFrameSize(_ newSize: NSSize) {
         super.setFrameSize(newSize)
         updateDrawableSize()
     }
@@ -43,9 +45,18 @@ public class MetalView: NSView {
         )
     }
     
-    public override func viewDidMoveToWindow() {
+    override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         updateDrawableSize()
+        window?.makeFirstResponder(self)
+    }
+    
+    override func keyDown(with event: NSEvent) {
+        Input.shared.keyDown(event.keyCode)
+    }
+    
+    override func keyUp(with event: NSEvent) {
+        Input.shared.keyUp(event.keyCode)
     }
 }
 #endif
