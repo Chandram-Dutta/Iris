@@ -57,6 +57,24 @@
             "name": "Release Snake",
             "program": "${workspaceFolder:Iris}/.build/release/Snake",
             "preLaunchTask": "swift: Build Release Snake"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Iris}",
+            "name": "Debug SpaceShooter",
+            "program": "${workspaceFolder:Iris}/.build/debug/SpaceShooter",
+            "preLaunchTask": "swift: Build Debug SpaceShooter"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Iris}",
+            "name": "Release SpaceShooter",
+            "program": "${workspaceFolder:Iris}/.build/release/SpaceShooter",
+            "preLaunchTask": "swift: Build Release SpaceShooter"
         }
     ]
 }

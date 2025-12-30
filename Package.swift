@@ -21,6 +21,10 @@ let package = Package(
             name: "Snake",
             targets: ["Snake"]
         ),
+        .executable(
+            name: "SpaceShooter",
+            targets: ["SpaceShooter"]
+        ),
     ],
     targets: [
         .target(
@@ -39,6 +43,12 @@ let package = Package(
             name: "Snake",
             dependencies: ["Iris"],
             path: "Examples/Snake"
+        ),
+        .executableTarget(
+            name: "SpaceShooter",
+            dependencies: ["Iris"],
+            path: "Examples/SpaceShooter",
+            resources: [.copy("Resources")]
         ),
         .testTarget(
             name: "IrisTests",
