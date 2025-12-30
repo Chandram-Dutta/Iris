@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Iris}",
+            "name": "Debug IrisRunner",
+            "target": "IrisRunner",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug IrisRunner"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Iris}",
+            "name": "Release IrisRunner",
+            "target": "IrisRunner",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release IrisRunner"
+        }
+    ]
+}
