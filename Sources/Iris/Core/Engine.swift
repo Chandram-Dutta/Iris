@@ -9,9 +9,11 @@ public class Engine {
     private var frameCount: Int = 0
     
     private var game: Game?
+    private let graphics = GraphicsContext()
     
     #if os(macOS)
     public private(set) var app: MacApp?
+    private var renderer: Renderer?
     #endif
     
     public init() {}
@@ -21,6 +23,11 @@ public class Engine {
         #if os(macOS)
         app = MacApp(engine: self)
         start(game: game)
+        
+        if let metalLayer = app?.window.metalView.metalLayer {
+            renderer = Renderer(metalLayer: metalLayer)
+        }
+        
         app?.run()
         #endif
     }
@@ -31,6 +38,7 @@ public class Engine {
         lastTime = DispatchTime.now().uptimeNanoseconds
     }
     
+    @MainActor
     public func tick() {
         guard isRunning, let game = game else { return }
         
@@ -41,7 +49,13 @@ public class Engine {
         deltaTime = min(deltaTime, maxDeltaTime)
         
         game.update(deltaTime: deltaTime)
-        game.draw()
+        
+        graphics.reset()
+        game.draw(graphics)
+        
+        #if os(macOS)
+        renderer?.render(commands: graphics.commands)
+        #endif
         
         logDebugInfo(deltaTime: deltaTime)
     }

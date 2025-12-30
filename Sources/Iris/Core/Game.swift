@@ -2,5 +2,5 @@ import Foundation
 
 public protocol Game {
     func update(deltaTime: TimeInterval)
-    func draw()
+    func draw(_ g: Graphics)
 }

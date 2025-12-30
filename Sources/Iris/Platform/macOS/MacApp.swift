@@ -29,6 +29,8 @@ public class MacApp {
             self?.stop()
         }
         delegate.macApp = self
+        
+        window.create()
     }
     
     func run() {
@@ -36,7 +38,6 @@ public class MacApp {
         app.delegate = delegate
         app.setActivationPolicy(.regular)
         
-        window.create()
         window.show()
         
         startDisplayLink()

@@ -1,9 +1,11 @@
 #if os(macOS)
 import AppKit
+import QuartzCore
 
 @MainActor
 public class MacWindow: NSObject, NSWindowDelegate {
     private var window: NSWindow!
+    public private(set) var metalView: MetalView!
     public var onClose: (() -> Void)?
     
     public override init() {
@@ -21,6 +23,9 @@ public class MacWindow: NSObject, NSWindowDelegate {
         window.title = title
         window.delegate = self
         window.center()
+        
+        metalView = MetalView(frame: rect)
+        window.contentView = metalView
     }
     
     public func show() {
