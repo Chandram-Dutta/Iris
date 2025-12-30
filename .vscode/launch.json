@@ -39,6 +39,24 @@
             "name": "Release Breakout",
             "program": "${workspaceFolder:Iris}/.build/release/Breakout",
             "preLaunchTask": "swift: Build Release Breakout"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Iris}",
+            "name": "Debug Snake",
+            "program": "${workspaceFolder:Iris}/.build/debug/Snake",
+            "preLaunchTask": "swift: Build Debug Snake"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Iris}",
+            "name": "Release Snake",
+            "program": "${workspaceFolder:Iris}/.build/release/Snake",
+            "preLaunchTask": "swift: Build Release Snake"
         }
     ]
 }
