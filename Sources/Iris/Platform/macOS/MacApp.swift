@@ -19,18 +19,20 @@
         private let delegate = MacAppDelegate()
         let window: MacWindow
         private unowned let engine: Engine
+        private let config: WindowConfig
 
         private var displayLink: CVDisplayLink?
 
-        init(engine: Engine) {
+        init(engine: Engine, config: WindowConfig) {
             self.engine = engine
+            self.config = config
             window = MacWindow()
             window.onClose = { [weak self] in
                 self?.stop()
             }
             delegate.macApp = self
 
-            window.create()
+            window.create(config: config)
         }
 
         func run() {
