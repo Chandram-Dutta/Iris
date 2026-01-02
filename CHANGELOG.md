@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.3] - 2026-01-02
+
+### Fixed
+- **Complete Cross-Platform Support**: Removed all dependencies on Apple-specific `simd` module across the entire codebase.
+  - Implemented custom `matrix_float4x4` struct and matrix multiplication for cross-platform compatibility.
+  - Added SIMD2 extensions (`.length()`, `.lengthSquared()`) for vector operations.
+  - Affected files: `CollisionDetection.swift`, `Hitbox.swift`, `ConvexHull.swift`, `DrawCommand.swift`, `Renderer.swift`, `IrisRunner.swift`.
+- **Concurrency Safety**: Made `matrix_float4x4` conform to `Sendable` for Swift 6 strict concurrency checking.
+
 ## [0.1.2] - 2026-01-02
 
 ### Fixed

@@ -1,6 +1,5 @@
 import Foundation
 import Iris
-import simd
 
 class TestGame: Game {
     var spriteX: Float = 300

@@ -1,7 +1,6 @@
 #if os(macOS)
     import Metal
     import QuartzCore
-    import simd
 
     @MainActor
     class Renderer {

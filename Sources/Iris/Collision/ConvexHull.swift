@@ -1,5 +1,4 @@
 import Foundation
-import simd
 
 /// Generates convex hulls from point sets or image transparency data.
 public struct ConvexHullGenerator {
@@ -44,8 +43,8 @@ public struct ConvexHullGenerator {
                         next = i
                     } else if cross == 0 {
                         // Collinear: choose the farther point
-                        let distNext = simd_length_squared(points[next] - points[current])
-                        let distI = simd_length_squared(points[i] - points[current])
+                        let distNext = (points[next] - points[current]).lengthSquared()
+                        let distI = (points[i] - points[current]).lengthSquared()
                         if distI > distNext {
                             next = i
                         }
@@ -166,7 +165,7 @@ public struct ConvexHullGenerator {
         let lengthSq = dx * dx + dy * dy
 
         if lengthSq == 0 {
-            return simd_length(point - lineStart)
+            return (point - lineStart).length()
         }
 
         let area = abs(
@@ -181,7 +180,7 @@ public struct ConvexHullGenerator {
         var perimeter: Float = 0
         for i in 0..<hull.count {
             let j = (i + 1) % hull.count
-            perimeter += simd_length(hull[j] - hull[i])
+            perimeter += (hull[j] - hull[i]).length()
         }
 
         // Epsilon is roughly proportional to how much we need to simplify

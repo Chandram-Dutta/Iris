@@ -1,5 +1,4 @@
 import Foundation
-import simd
 
 /// Shape types for collision detection with varying accuracy and performance characteristics.
 public enum HitboxShape: Sendable {
@@ -114,7 +113,7 @@ public struct Hitbox: Sendable {
 
         case .circle(let radius):
             let delta = point - position
-            return simd_length(delta) <= radius
+            return delta.length() <= radius
 
         case .polygon(let vertices):
             let transformed = transformedVertices(vertices)
