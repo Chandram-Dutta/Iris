@@ -86,8 +86,6 @@
             return device.makeSamplerState(descriptor: descriptor)
         }
 
-        // MARK: - Shader Compilation
-
         private func compileShaders() -> Bool {
             let shaderSource = """
                 #include <metal_stdlib>
@@ -424,8 +422,6 @@
             return true
         }
 
-        // MARK: - Rendering
-
         func render(commands: [DrawCommand]) {
             guard let metalLayer = metalLayer,
                 let drawable = metalLayer.nextDrawable(),
@@ -536,8 +532,6 @@
             }
             return defaultClearColor
         }
-
-        // MARK: - Draw Primitives
 
         private func drawRect(
             encoder: MTLRenderCommandEncoder, x: Float, y: Float, width: Float, height: Float,

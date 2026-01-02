@@ -12,6 +12,9 @@ class Player {
 
     var image: Image?
 
+    /// Hitbox generated from image transparency (convex hull)
+    var hitbox: Hitbox
+
     // Shooting cooldown
     var shootCooldown: Double = 0
     let shootRate: Double = 0.2  // Fire every 0.2 seconds
@@ -22,6 +25,16 @@ class Player {
         self.x = screenWidth / 2 - width / 2
         self.y = screenHeight - height - 40
         self.image = Image.load(GameResources.imagePath("spaceship.png"))
+
+        // Generate hitbox from image transparency or use fallback AABB
+        if let img = image, let generatedHitbox = img.generateHitbox() {
+            self.hitbox = generatedHitbox
+        } else {
+            // Fallback to AABB slightly smaller than visual bounds
+            self.hitbox = Hitbox(x: 0, y: 0, shape: .aabb(width: width * 0.7, height: height * 0.8))
+        }
+
+        updateHitboxPosition()
     }
 
     func update(deltaTime: Double) {
@@ -47,6 +60,12 @@ class Player {
         if shootCooldown > 0 {
             shootCooldown -= deltaTime
         }
+
+        updateHitboxPosition()
+    }
+
+    private func updateHitboxPosition() {
+        hitbox.position = SIMD2<Float>(x, y)
     }
 
     func canShoot() -> Bool {

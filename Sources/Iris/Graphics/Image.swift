@@ -20,6 +20,54 @@ public struct Image: Equatable, Hashable, Sendable {
     public static func load(_ path: String) -> Image? {
         return ImageCache.shared.load(path: path)
     }
+
+    /// Returns the dimensions of this image.
+    public var size: (width: Int, height: Int)? {
+        guard let data = ImageCache.shared.getData(for: self) else {
+            return nil
+        }
+        return (data.width, data.height)
+    }
+
+    /// Generates a convex hull hitbox from the image's transparency.
+    /// The convex hull tightly wraps around the non-transparent pixels.
+    /// - Parameters:
+    ///   - alphaThreshold: Minimum alpha value (0-255) to consider a pixel solid
+    ///   - simplified: If true, reduces vertices for better performance
+    /// - Returns: A Hitbox with polygon shape, or nil if image data unavailable
+    public func generateHitbox(alphaThreshold: UInt8 = 128, simplified: Bool = true) -> Hitbox? {
+        guard let mask = generatePixelMask(alphaThreshold: alphaThreshold) else {
+            return nil
+        }
+
+        let hullVertices = ConvexHullGenerator.fromPixelMask(mask, simplified: simplified)
+
+        guard hullVertices.count >= 3 else {
+            // Fallback to AABB
+            return Hitbox(
+                x: 0, y: 0,
+                shape: .aabb(width: Float(mask.width), height: Float(mask.height))
+            )
+        }
+
+        return Hitbox(x: 0, y: 0, shape: .polygon(vertices: hullVertices))
+    }
+
+    /// Generates a pixel-perfect collision mask from the image's transparency.
+    /// - Parameter alphaThreshold: Minimum alpha value (0-255) to consider a pixel solid
+    /// - Returns: A PixelMask for pixel-perfect collision, or nil if image data unavailable
+    public func generatePixelMask(alphaThreshold: UInt8 = 128) -> PixelMask? {
+        guard let data = ImageCache.shared.getData(for: self) else {
+            return nil
+        }
+
+        return PixelMask.fromPixels(
+            data.pixels,
+            width: data.width,
+            height: data.height,
+            alphaThreshold: alphaThreshold
+        )
+    }
 }
 
 struct ImageData: Sendable {

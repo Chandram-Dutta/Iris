@@ -11,6 +11,10 @@ class Enemy {
     var isActive: Bool = true
 
     static nonisolated(unsafe) var image: Image?
+    static nonisolated(unsafe) var sharedHitboxTemplate: HitboxShape?
+
+    /// Hitbox for this enemy instance
+    var hitbox: Hitbox
 
     // Animation
     var wobbleTime: Double = 0
@@ -23,9 +27,21 @@ class Enemy {
         self.speedX = speedX
         self.wobbleTime = Double.random(in: 0...3.14)
 
+        // Load image and generate shared hitbox template once
         if Enemy.image == nil {
             Enemy.image = Image.load(GameResources.imagePath("enemy.png"))
+
+            if let img = Enemy.image, let generatedHitbox = img.generateHitbox() {
+                Enemy.sharedHitboxTemplate = generatedHitbox.shape
+            } else {
+                // Fallback to AABB
+                Enemy.sharedHitboxTemplate = .aabb(width: 48 * 0.8, height: 48 * 0.8)
+            }
         }
+
+        // Use the shared hitbox template
+        self.hitbox = Hitbox(
+            x: x, y: y, shape: Enemy.sharedHitboxTemplate ?? .aabb(width: 48, height: 48))
     }
 
     func update(deltaTime: Double, screenWidth: Float, screenHeight: Float) {
@@ -44,6 +60,9 @@ class Enemy {
         if y > screenHeight + height {
             isActive = false
         }
+
+        // Update hitbox position
+        hitbox.position = SIMD2<Float>(x, y)
     }
 
     func draw(_ g: Graphics) {

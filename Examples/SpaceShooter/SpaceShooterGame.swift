@@ -94,8 +94,9 @@ class SpaceShooterGame: Game {
             enemies[i].update(
                 deltaTime: deltaTime, screenWidth: screenWidth, screenHeight: screenHeight)
 
-            // Check collision with player
-            if enemies[i].isActive && checkCollision(rect1: enemies[i].rect, rect2: player.rect) {
+            // Check collision with player using new hitbox system
+            if enemies[i].isActive && CollisionDetection.collides(enemies[i].hitbox, player.hitbox)
+            {
                 enemies[i].isActive = false
                 explosions.append(
                     Explosion(
@@ -106,14 +107,14 @@ class SpaceShooterGame: Game {
         }
         enemies.removeAll { !$0.isActive }
 
-        // Check bullet-enemy collisions
+        // Check bullet-enemy collisions using new hitbox system
         for bullet in bullets {
             guard bullet.isActive else { continue }
 
             for i in 0..<enemies.count {
                 guard enemies[i].isActive else { continue }
 
-                if checkCollision(rect1: bullet.rect, rect2: enemies[i].rect) {
+                if CollisionDetection.collides(bullet.hitbox, enemies[i].hitbox) {
                     bullet.isActive = false
                     enemies[i].isActive = false
 

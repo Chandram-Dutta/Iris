@@ -8,12 +8,16 @@ struct Paddle {
     let speed: Float = 400.0
     let screenWidth: Float
 
+    /// AABB hitbox for paddle collision
+    var hitbox: Hitbox
+
     init(x: Float, y: Float, width: Float, height: Float, screenWidth: Float) {
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.screenWidth = screenWidth
+        self.hitbox = Hitbox(x: x, y: y, shape: .aabb(width: width, height: height))
     }
 
     mutating func update(deltaTime: Double) {
@@ -27,6 +31,9 @@ struct Paddle {
         // Clamp to screen
         if x < 0 { x = 0 }
         if x + width > screenWidth { x = screenWidth - width }
+
+        // Update hitbox position
+        hitbox.position = SIMD2<Float>(x, y)
     }
 
     func draw(_ g: Graphics) {

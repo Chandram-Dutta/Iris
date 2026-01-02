@@ -10,9 +10,17 @@ class Bullet {
 
     static nonisolated(unsafe) var image: Image?
 
+    /// Circle hitbox for the bullet (more accurate than rectangular)
+    var hitbox: Hitbox
+
     init(x: Float, y: Float) {
         self.x = x - width / 2
         self.y = y
+
+        // Use circle hitbox for bullet (centered)
+        let centerX = x
+        let centerY = y + height / 2
+        self.hitbox = Hitbox(x: centerX, y: centerY, shape: .circle(radius: width / 2))
 
         if Bullet.image == nil {
             Bullet.image = Image.load(GameResources.imagePath("bullet.png"))
@@ -25,6 +33,9 @@ class Bullet {
         if y < -height {
             isActive = false
         }
+
+        // Update hitbox position
+        hitbox.position = SIMD2<Float>(x + width / 2, y + height / 2)
     }
 
     func draw(_ g: Graphics) {

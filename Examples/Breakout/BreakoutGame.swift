@@ -56,25 +56,21 @@ class BreakoutGame: Game {
         paddle.update(deltaTime: deltaTime)
         ball.update(deltaTime: deltaTime, screenWidth: screenWidth, screenHeight: screenHeight)
 
-        // Death check
         if ball.y > screenHeight {
             isGameOver = true
         }
 
-        // Paddle collision
-        if checkCollision(rect1: ball.rect, rect2: paddle.rect) {
+        if CollisionDetection.collides(ball.hitbox, paddle.hitbox) {
             ball.dy = -abs(ball.dy)  // Always bounce up
-            // Simple speed increase
             ball.dx *= 1.05
             ball.dy *= 1.05
         }
 
-        // Brick collision
         for i in 0..<bricks.count {
             if bricks[i].isActive {
-                if checkCollision(rect1: ball.rect, rect2: bricks[i].rect) {
+                if CollisionDetection.collides(ball.hitbox, bricks[i].hitbox) {
                     bricks[i].isActive = false
-                    ball.bounceY()  // Simple bounce
+                    ball.bounceY()
                     score += 10
                     break  // Only one brick per frame to prevent weirdness
                 }
@@ -86,7 +82,6 @@ class BreakoutGame: Game {
         g.clear(.black)
 
         if isGameOver {
-            // Add gradient overlay for game over screen
             let overlayGradient = Gradient.linear(
                 startX: 0, startY: 0,
                 endX: 0, endY: screenHeight,
@@ -108,7 +103,6 @@ class BreakoutGame: Game {
 
             for brick in bricks {
                 if brick.isActive {
-                    // Create gradient for each brick with depth effect
                     let gradient = Gradient.linear(
                         startX: brick.x, startY: brick.y,
                         endX: brick.x, endY: brick.y + brick.height,
@@ -123,7 +117,6 @@ class BreakoutGame: Game {
                         x: brick.x, y: brick.y, width: brick.width, height: brick.height,
                         gradient: gradient)
 
-                    // Add subtle stroke for brick definition
                     g.strokeRect(
                         x: brick.x, y: brick.y, width: brick.width, height: brick.height,
                         strokeWidth: 1, color: Color(r: 0.3, g: 0.3, b: 0.3, a: 0.5))

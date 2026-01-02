@@ -64,8 +64,6 @@ public protocol Graphics {
     /// Draws a filled polygon.
     func fillPolygon(points: [SIMD2<Float>], color: Color)
 
-    // MARK: - Stroke Methods
-
     /// Draws a circle outline.
     func strokeCircle(x: Float, y: Float, radius: Float, width: Float, color: Color)
 
@@ -76,8 +74,6 @@ public protocol Graphics {
     /// Draws a polygon outline.
     func strokePolygon(points: [SIMD2<Float>], width: Float, color: Color)
 
-    // MARK: - Gradients
-
     /// Fills a rectangle with a gradient.
     func fillRectGradient(x: Float, y: Float, width: Float, height: Float, gradient: Gradient)
 
@@ -86,8 +82,6 @@ public protocol Graphics {
 
     /// Draws a string of text.
     func drawText(_ text: String, x: Float, y: Float, font: Font, color: Color)
-
-    // MARK: - Transformations
 
     /// Rotates the current coordinate system.
     /// - Parameter angle: Rotation angle in radians.
@@ -104,8 +98,6 @@ public protocol Graphics {
 
     /// Restores the last saved graphics state.
     func restore()
-
-    // MARK: - State
 
     /// Sets the current blend mode.
     func setBlendMode(_ mode: BlendMode)
