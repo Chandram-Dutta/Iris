@@ -4,6 +4,10 @@
 
 A minimal 2D game engine in Swift.
 
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FChandram-Dutta%2FIris%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/Chandram-Dutta/Iris)
+
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FChandram-Dutta%2FIris%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/Chandram-Dutta/Iris)
+
 ## Philosophy
 
 Iris provides the bare minimum to make games: a window, a game loop, drawing primitives, and input. No scenes, no ECS, no editor. You write code, you draw pixels.

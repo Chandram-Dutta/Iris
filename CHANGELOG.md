@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.3] - 2026-01-02
+
+### Added
+- **DocC Documentation**: Added a comprehensive documentation catalog and enabled automatic documentation hosting on the Swift Package Index.
+- **Swift-DocC-Plugin**: Integrated the DocC plugin for local documentation generation.
+
 ## [1.1.2] - 2026-01-02
 
 ### Added
