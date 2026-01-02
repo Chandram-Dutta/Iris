@@ -86,6 +86,16 @@ class BreakoutGame: Game {
         g.clear(.black)
 
         if isGameOver {
+            // Add gradient overlay for game over screen
+            let overlayGradient = Gradient.linear(
+                startX: 0, startY: 0,
+                endX: 0, endY: screenHeight,
+                startColor: Color(r: 0.1, g: 0, b: 0, a: 0.8),
+                endColor: Color(r: 0, g: 0, b: 0, a: 0.95)
+            )
+            g.fillRectGradient(
+                x: 0, y: 0, width: screenWidth, height: screenHeight, gradient: overlayGradient)
+
             g.drawText(
                 "GAME OVER", x: screenWidth / 2 - 50, y: screenHeight / 2, font: .system(size: 32),
                 color: .white)
@@ -98,9 +108,25 @@ class BreakoutGame: Game {
 
             for brick in bricks {
                 if brick.isActive {
-                    g.fillRect(
+                    // Create gradient for each brick with depth effect
+                    let gradient = Gradient.linear(
+                        startX: brick.x, startY: brick.y,
+                        endX: brick.x, endY: brick.y + brick.height,
+                        startColor: brick.color,
+                        endColor: Color(
+                            r: brick.color.r * 0.6,
+                            g: brick.color.g * 0.6,
+                            b: brick.color.b * 0.6
+                        )
+                    )
+                    g.fillRectGradient(
                         x: brick.x, y: brick.y, width: brick.width, height: brick.height,
-                        color: brick.color)
+                        gradient: gradient)
+
+                    // Add subtle stroke for brick definition
+                    g.strokeRect(
+                        x: brick.x, y: brick.y, width: brick.width, height: brick.height,
+                        strokeWidth: 1, color: Color(r: 0.3, g: 0.3, b: 0.3, a: 0.5))
                 }
             }
 

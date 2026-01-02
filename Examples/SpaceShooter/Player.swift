@@ -61,13 +61,37 @@ class Player {
         if let img = image {
             g.drawImage(img, x: x, y: y)
         } else {
-            // Fallback: draw a simple triangle-ish shape
-            g.fillRect(
+            // Enhanced fallback: draw a gradient spaceship
+            // Main body with gradient
+            let bodyGradient = Gradient.linear(
+                startX: x, startY: y,
+                endX: x, endY: y + height,
+                startColor: Color(r: 0.5, g: 0.8, b: 1.0),
+                endColor: Color(r: 0.2, g: 0.4, b: 0.8)
+            )
+            g.fillRectGradient(
                 x: x + width / 2 - 5, y: y, width: 10, height: height - 10,
-                color: Color(r: 0.3, g: 0.6, b: 1.0))
-            g.fillRect(
+                gradient: bodyGradient
+            )
+
+            // Base wings
+            let wingsGradient = Gradient.linear(
+                startX: x, startY: y + height - 20,
+                endX: x, endY: y + height,
+                startColor: Color(r: 0.4, g: 0.7, b: 0.9),
+                endColor: Color(r: 0.2, g: 0.5, b: 0.7)
+            )
+            g.fillRectGradient(
                 x: x, y: y + height - 20, width: width, height: 20,
-                color: Color(r: 0.3, g: 0.6, b: 1.0))
+                gradient: wingsGradient
+            )
+
+            // Add stroke outlines
+            g.strokeRect(
+                x: x + width / 2 - 5, y: y, width: 10, height: height - 10,
+                strokeWidth: 1.5,
+                color: Color(r: 0.7, g: 0.9, b: 1.0, a: 0.8)
+            )
         }
     }
 

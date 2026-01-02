@@ -37,19 +37,22 @@ struct Grid {
     }
 
     func draw(_ g: Graphics) {
-        // Draw subtle grid lines
-        let gridColor = Color(r: 0.1, g: 0.15, b: 0.2)
+        // Draw grid outline with stroke
+        let gridColor = Color(r: 0.15, g: 0.2, b: 0.25, a: 0.6)
 
-        // Vertical lines
-        for i in 0...cols {
-            let x = offsetX + Float(i) * cellSize
-            g.fillRect(x: x, y: offsetY, width: 1, height: Float(rows) * cellSize, color: gridColor)
-        }
-
-        // Horizontal lines
-        for i in 0...rows {
-            let y = offsetY + Float(i) * cellSize
-            g.fillRect(x: offsetX, y: y, width: Float(cols) * cellSize, height: 1, color: gridColor)
+        // Draw each cell outline
+        for row in 0..<rows {
+            for col in 0..<cols {
+                let x = offsetX + Float(col) * cellSize
+                let y = offsetY + Float(row) * cellSize
+                g.strokeRect(
+                    x: x, y: y,
+                    width: cellSize,
+                    height: cellSize,
+                    strokeWidth: 0.5,
+                    color: gridColor
+                )
+            }
         }
     }
 }

@@ -103,41 +103,54 @@ struct Snake {
 
             // Gradient from head (bright green) to tail (darker green)
             let ratio = Float(index) / Float(max(segmentCount - 1, 1))
-            let color: Color
+            let padding: Float = 1.0
 
             if index == 0 {
-                // Head - bright cyan-green
-                color = Color(r: 0.2, g: 1.0, b: 0.6)
+                // Head - use radial gradient for depth
+                let gradient = Gradient.radial(
+                    centerX: pos.x + cellSize / 2,
+                    centerY: pos.y + cellSize / 2,
+                    radius: cellSize / 2,
+                    innerColor: Color(r: 0.4, g: 1.0, b: 0.8),
+                    outerColor: Color(r: 0.2, g: 1.0, b: 0.6)
+                )
+                g.fillRectGradient(
+                    x: pos.x + padding,
+                    y: pos.y + padding,
+                    width: cellSize - padding * 2,
+                    height: cellSize - padding * 2,
+                    gradient: gradient
+                )
             } else {
-                // Body - gradient from bright to dark green
+                // Body - use linear gradient for 3D effect
                 let r = 0.1 + (1.0 - ratio) * 0.3
-                let g = 0.5 + (1.0 - ratio) * 0.5
+                let gVal = 0.5 + (1.0 - ratio) * 0.5
                 let b = 0.2 + (1.0 - ratio) * 0.4
-                color = Color(r: r, g: g, b: b)
+
+                let gradient = Gradient.linear(
+                    startX: pos.x, startY: pos.y,
+                    endX: pos.x, endY: pos.y + cellSize,
+                    startColor: Color(r: r, g: gVal, b: b),
+                    endColor: Color(r: r * 0.7, g: gVal * 0.7, b: b * 0.7)
+                )
+                g.fillRectGradient(
+                    x: pos.x + padding,
+                    y: pos.y + padding,
+                    width: cellSize - padding * 2,
+                    height: cellSize - padding * 2,
+                    gradient: gradient
+                )
             }
 
-            // Draw segment with slight padding for visual separation
-            let padding: Float = 1.0
-            g.fillRect(
+            // Add stroke outline for definition
+            g.strokeRect(
                 x: pos.x + padding,
                 y: pos.y + padding,
                 width: cellSize - padding * 2,
                 height: cellSize - padding * 2,
-                color: color
+                strokeWidth: 1.5,
+                color: Color(r: 0.3, g: 0.8, b: 0.5, a: 0.8)
             )
-
-            // Add highlight to head
-            if index == 0 {
-                let highlightSize = cellSize * 0.3
-                let highlightOffset = cellSize * 0.15
-                g.fillRect(
-                    x: pos.x + highlightOffset,
-                    y: pos.y + highlightOffset,
-                    width: highlightSize,
-                    height: highlightSize,
-                    color: Color(r: 1.0, g: 1.0, b: 1.0, a: 0.7)
-                )
-            }
         }
     }
 }

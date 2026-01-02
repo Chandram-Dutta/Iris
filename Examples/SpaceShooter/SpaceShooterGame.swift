@@ -196,25 +196,25 @@ class SpaceShooterGame: Game {
     }
 
     func drawBackground(_ g: Graphics) {
-        // Deep space gradient
-        let bands = 15
-        for i in 0..<bands {
-            let ratio = Float(i) / Float(bands)
-            let r: Float = 0.02 + ratio * 0.03
-            let gb: Float = 0.0 + ratio * 0.04
-            let b: Float = 0.05 + ratio * 0.08
-
-            let y = Float(i) * screenHeight / Float(bands)
-            let height = screenHeight / Float(bands) + 1
-            g.fillRect(
-                x: 0, y: y, width: screenWidth, height: height, color: Color(r: r, g: gb, b: b))
-        }
+        // Use native gradient instead of manual banding
+        let gradient = Gradient.linear(
+            startX: 0, startY: 0,
+            endX: 0, endY: screenHeight,
+            startColor: Color(r: 0.02, g: 0.0, b: 0.05),
+            endColor: Color(r: 0.05, g: 0.04, b: 0.13)
+        )
+        g.fillRectGradient(x: 0, y: 0, width: screenWidth, height: screenHeight, gradient: gradient)
     }
 
     func drawUI(_ g: Graphics) {
-        // Top bar background
-        g.fillRect(
-            x: 0, y: 0, width: screenWidth, height: 50, color: Color(r: 0, g: 0, b: 0, a: 0.7))
+        // Top bar background with gradient
+        let gradient = Gradient.linear(
+            startX: 0, startY: 0,
+            endX: 0, endY: 50,
+            startColor: Color(r: 0, g: 0, b: 0, a: 0.8),
+            endColor: Color(r: 0, g: 0, b: 0, a: 0.6)
+        )
+        g.fillRectGradient(x: 0, y: 0, width: screenWidth, height: 50, gradient: gradient)
 
         // Score
         g.drawText("SCORE: \(score)", x: 20, y: 15, font: .system(size: 20), color: .white)
@@ -236,10 +236,14 @@ class SpaceShooterGame: Game {
     }
 
     func drawGameOver(_ g: Graphics) {
-        // Overlay
-        g.fillRect(
-            x: 0, y: 0, width: screenWidth, height: screenHeight,
-            color: Color(r: 0, g: 0, b: 0, a: 0.8))
+        // Gradient overlay
+        let gradient = Gradient.linear(
+            startX: 0, startY: 0,
+            endX: 0, endY: screenHeight,
+            startColor: Color(r: 0.1, g: 0, b: 0.05, a: 0.8),
+            endColor: Color(r: 0, g: 0, b: 0, a: 0.95)
+        )
+        g.fillRectGradient(x: 0, y: 0, width: screenWidth, height: screenHeight, gradient: gradient)
 
         // Title
         g.drawText(
@@ -270,9 +274,14 @@ class SpaceShooterGame: Game {
     }
 
     func drawPauseOverlay(_ g: Graphics) {
-        g.fillRect(
-            x: 0, y: 0, width: screenWidth, height: screenHeight,
-            color: Color(r: 0, g: 0, b: 0, a: 0.5))
+        // Gradient pause overlay
+        let gradient = Gradient.linear(
+            startX: 0, startY: 0,
+            endX: 0, endY: screenHeight,
+            startColor: Color(r: 0, g: 0, b: 0.1, a: 0.5),
+            endColor: Color(r: 0, g: 0, b: 0, a: 0.7)
+        )
+        g.fillRectGradient(x: 0, y: 0, width: screenWidth, height: screenHeight, gradient: gradient)
         g.drawText(
             "PAUSED", x: screenWidth / 2 - 60, y: screenHeight / 2 - 20,
             font: .system(size: 40), color: .white)

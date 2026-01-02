@@ -30,7 +30,17 @@ struct Paddle {
     }
 
     func draw(_ g: Graphics) {
-        g.fillRect(x: x, y: y, width: width, height: height, color: .white)
+        // Draw paddle with vertical gradient for 3D depth effect
+        let gradient = Gradient.linear(
+            startX: x, startY: y,
+            endX: x, endY: y + height,
+            startColor: Color(r: 0.9, g: 0.9, b: 0.9),
+            endColor: Color(r: 0.5, g: 0.5, b: 0.5)
+        )
+        g.fillRectGradient(x: x, y: y, width: width, height: height, gradient: gradient)
+
+        // Add stroke outline for definition
+        g.strokeRect(x: x, y: y, width: width, height: height, strokeWidth: 2, color: .white)
     }
 
     var rect: (x: Float, y: Float, w: Float, h: Float) {

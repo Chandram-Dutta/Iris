@@ -37,7 +37,16 @@ struct Ball {
     }
 
     func draw(_ g: Graphics) {
-        g.fillRect(x: x, y: y, width: radius * 2, height: radius * 2, color: .red)
+        // Draw ball with radial gradient for depth
+        let gradient = Gradient.radial(
+            centerX: x + radius, centerY: y + radius, radius: radius,
+            innerColor: Color(r: 1.0, g: 0.8, b: 0.8),
+            outerColor: Color(r: 1.0, g: 0.2, b: 0.2)
+        )
+        g.fillRectGradient(x: x, y: y, width: radius * 2, height: radius * 2, gradient: gradient)
+
+        // Add stroke outline for better visibility
+        g.strokeCircle(x: x + radius, y: y + radius, radius: radius, width: 2, color: .white)
     }
 
     var rect: (x: Float, y: Float, w: Float, h: Float) {

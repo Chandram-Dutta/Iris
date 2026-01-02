@@ -135,30 +135,25 @@ class SnakeGame: Game {
     }
 
     func drawBackground(_ g: Graphics) {
-        // Dark gradient background
-        let bgColor1 = Color(r: 0.05, g: 0.08, b: 0.12)
-        let bgColor2 = Color(r: 0.08, g: 0.12, b: 0.18)
-
-        // Simple gradient effect with horizontal bands
-        let bands = 20
-        for i in 0..<bands {
-            let ratio = Float(i) / Float(bands)
-            let r = bgColor1.r + (bgColor2.r - bgColor1.r) * ratio
-            let gb = bgColor1.g + (bgColor2.g - bgColor1.g) * ratio
-            let b = bgColor1.b + (bgColor2.b - bgColor1.b) * ratio
-            let color = Color(r: r, g: gb, b: b)
-
-            let y = Float(i) * screenHeight / Float(bands)
-            let height = screenHeight / Float(bands) + 1
-            g.fillRect(x: 0, y: y, width: screenWidth, height: height, color: color)
-        }
+        // Use native gradient instead of manual banding
+        let gradient = Gradient.linear(
+            startX: 0, startY: 0,
+            endX: 0, endY: screenHeight,
+            startColor: Color(r: 0.05, g: 0.08, b: 0.12),
+            endColor: Color(r: 0.08, g: 0.12, b: 0.18)
+        )
+        g.fillRectGradient(x: 0, y: 0, width: screenWidth, height: screenHeight, gradient: gradient)
     }
 
     func drawUI(_ g: Graphics) {
-        // UI background
-        g.fillRect(
-            x: 0, y: 0, width: screenWidth, height: uiHeight,
-            color: Color(r: 0.1, g: 0.15, b: 0.2, a: 0.9))
+        // UI background with gradient
+        let gradient = Gradient.linear(
+            startX: 0, startY: 0,
+            endX: 0, endY: uiHeight,
+            startColor: Color(r: 0.1, g: 0.15, b: 0.2, a: 0.95),
+            endColor: Color(r: 0.05, g: 0.1, b: 0.15, a: 0.9)
+        )
+        g.fillRectGradient(x: 0, y: 0, width: screenWidth, height: uiHeight, gradient: gradient)
 
         // Title
         g.drawText(
@@ -180,10 +175,14 @@ class SnakeGame: Game {
     }
 
     func drawGameOver(_ g: Graphics) {
-        // Semi-transparent overlay
-        g.fillRect(
-            x: 0, y: 0, width: screenWidth, height: screenHeight,
-            color: Color(r: 0, g: 0, b: 0, a: 0.7))
+        // Semi-transparent gradient overlay
+        let gradient = Gradient.linear(
+            startX: 0, startY: 0,
+            endX: 0, endY: screenHeight,
+            startColor: Color(r: 0.1, g: 0, b: 0, a: 0.7),
+            endColor: Color(r: 0, g: 0, b: 0, a: 0.9)
+        )
+        g.fillRectGradient(x: 0, y: 0, width: screenWidth, height: screenHeight, gradient: gradient)
 
         // Game Over text
         g.drawText(

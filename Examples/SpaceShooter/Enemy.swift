@@ -50,9 +50,24 @@ class Enemy {
         if let img = Enemy.image {
             g.drawImage(img, x: x, y: y)
         } else {
-            // Fallback: red/purple rectangle
-            g.fillRect(
-                x: x, y: y, width: width, height: height, color: Color(r: 0.8, g: 0.2, b: 0.5))
+            // Enhanced fallback with gradient and stroke
+            let gradient = Gradient.linear(
+                startX: x, startY: y,
+                endX: x, endY: y + height,
+                startColor: Color(r: 0.9, g: 0.3, b: 0.6),
+                endColor: Color(r: 0.6, g: 0.1, b: 0.3)
+            )
+            g.fillRectGradient(
+                x: x, y: y, width: width, height: height,
+                gradient: gradient
+            )
+
+            // Add stroke outline for definition
+            g.strokeRect(
+                x: x, y: y, width: width, height: height,
+                strokeWidth: 2.0,
+                color: Color(r: 1.0, g: 0.5, b: 0.7, a: 0.8)
+            )
         }
     }
 
