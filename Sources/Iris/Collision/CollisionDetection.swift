@@ -1,8 +1,24 @@
 import Foundation
-import simd
 
 /// Static collision detection utilities for various shape combinations.
 public struct CollisionDetection {
+
+    // MARK: - SIMD Helpers
+
+    /// Cross-platform length squared for SIMD2<Float>
+    private static func lengthSquared(_ vector: SIMD2<Float>) -> Float {
+        return vector.x * vector.x + vector.y * vector.y
+    }
+
+    /// Cross-platform length for SIMD2<Float>
+    private static func length(_ vector: SIMD2<Float>) -> Float {
+        return sqrt(lengthSquared(vector))
+    }
+
+    /// Cross-platform dot product for SIMD2<Float>
+    private static func dot(_ a: SIMD2<Float>, _ b: SIMD2<Float>) -> Float {
+        return a.x * b.x + a.y * b.y
+    }
 
     /// Checks if two hitboxes collide.
     /// Automatically dispatches to the appropriate algorithm based on shape types.
@@ -37,7 +53,7 @@ public struct CollisionDetection {
         centerB: SIMD2<Float>, radiusB: Float
     ) -> Bool {
         let delta = centerB - centerA
-        let distSq = simd_length_squared(delta)
+        let distSq = lengthSquared(delta)
         let radiusSum = radiusA + radiusB
         return distSq <= radiusSum * radiusSum
     }
@@ -114,7 +130,7 @@ public struct CollisionDetection {
                 segmentEnd: polygon[j]
             )
 
-            let distSq = simd_length_squared(circleCenter - closest)
+            let distSq = lengthSquared(circleCenter - closest)
             if distSq <= radius * radius {
                 return true
             }
@@ -240,24 +256,24 @@ public struct CollisionDetection {
         polygonA: [SIMD2<Float>],
         polygonB: [SIMD2<Float>]
     ) -> Bool {
-        let len = simd_length(axis)
+        let len = length(axis)
         guard len > 0 else { return false }
         let normalizedAxis = axis / len
 
         // Project polygon A onto axis
-        var minA = simd_dot(polygonA[0], normalizedAxis)
+        var minA = dot(polygonA[0], normalizedAxis)
         var maxA = minA
         for v in polygonA.dropFirst() {
-            let proj = simd_dot(v, normalizedAxis)
+            let proj = dot(v, normalizedAxis)
             minA = min(minA, proj)
             maxA = max(maxA, proj)
         }
 
         // Project polygon B onto axis
-        var minB = simd_dot(polygonB[0], normalizedAxis)
+        var minB = dot(polygonB[0], normalizedAxis)
         var maxB = minB
         for v in polygonB.dropFirst() {
-            let proj = simd_dot(v, normalizedAxis)
+            let proj = dot(v, normalizedAxis)
             minB = min(minB, proj)
             maxB = max(maxB, proj)
         }
@@ -272,13 +288,13 @@ public struct CollisionDetection {
         segmentEnd: SIMD2<Float>
     ) -> SIMD2<Float> {
         let line = segmentEnd - segmentStart
-        let lengthSq = simd_length_squared(line)
+        let lengthSq = lengthSquared(line)
 
         if lengthSq == 0 {
             return segmentStart
         }
 
-        let t = max(0, min(1, simd_dot(point - segmentStart, line) / lengthSq))
+        let t = max(0, min(1, dot(point - segmentStart, line) / lengthSq))
         return segmentStart + t * line
     }
 

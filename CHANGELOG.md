@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2] - 2026-01-02
+
+### Fixed
+- **Linux Compatibility**: Removed dependency on Apple-specific `simd` module by implementing cross-platform SIMD operations. The engine now builds successfully on Linux (GitHub Actions) and other non-Apple platforms.
+
 ## [0.1.1] - 2026-01-02
 
 ### Added
