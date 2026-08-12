@@ -29,7 +29,7 @@ class Enemy {
 
         // Load image and generate shared hitbox template once
         if Enemy.image == nil {
-            Enemy.image = Image.load(GameResources.imagePath("enemy.png"))
+            Enemy.image = Image.load(GameResources.path("enemy.png"))
 
             if let img = Enemy.image, let generatedHitbox = img.generateHitbox() {
                 Enemy.sharedHitboxTemplate = generatedHitbox.shape

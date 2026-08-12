@@ -23,7 +23,7 @@ class Bullet {
         self.hitbox = Hitbox(x: centerX, y: centerY, shape: .circle(radius: width / 2))
 
         if Bullet.image == nil {
-            Bullet.image = Image.load(GameResources.imagePath("bullet.png"))
+            Bullet.image = Image.load(GameResources.path("bullet.png"))
         }
     }
 

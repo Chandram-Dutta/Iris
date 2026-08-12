@@ -54,6 +54,10 @@ class HelloWorld: Game {
 - ``Input``
 - ``Key``
 
+### Audio
+- ``Sound``
+- ``Music``
+
 ### Physics & Collision
 - ``Hitbox``
 - ``HitboxShape``

@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-08-12
+
+### Added
+- **Audio System**:
+  - New `Sound` type for fire-and-forget sound effects with overlapping voices (up to 16 simultaneous) and per-play volume.
+  - New `Music` type for a single looping music channel with `play`, `pause`, `resume`, `stop`, and `setVolume` controls.
+  - Supports WAV, MP3, and M4A. Assets are cached by path; missing files return `nil` and log a warning.
+  - Backed by `AVAudioEngine` on macOS for low-latency playback; silent no-op stubs on other platforms keep cross-platform builds green.
+  - SpaceShooter example now plays laser and explosion sound effects plus looping background music that pauses with the game.
+
 ## [1.1.3] - 2026-01-02
 
 ### Added

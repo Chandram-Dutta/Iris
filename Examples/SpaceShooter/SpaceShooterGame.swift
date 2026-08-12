@@ -27,6 +27,10 @@ class SpaceShooterGame: Game {
     var screenShake: Float = 0
     var flashTimer: Double = 0
 
+    // Audio
+    let shootSound = Sound.load(GameResources.path("shoot.wav"))
+    let explosionSound = Sound.load(GameResources.path("explosion.wav"))
+
     init() {
         player = Player(screenWidth: screenWidth, screenHeight: screenHeight)
 
@@ -34,6 +38,8 @@ class SpaceShooterGame: Game {
         for _ in 0..<100 {
             stars.append(Star(screenWidth: screenWidth, screenHeight: screenHeight))
         }
+
+        Music.load(GameResources.path("music.wav"))?.play(volume: 0.3)
     }
 
     func update(deltaTime: Double, debug: DebugInfo) {
@@ -48,6 +54,11 @@ class SpaceShooterGame: Game {
         // Pause toggle
         if Input.shared.isKeyDown(.escape) {
             isPaused.toggle()
+            if isPaused {
+                Music.pause()
+            } else {
+                Music.resume()
+            }
         }
 
         if isPaused { return }
@@ -74,6 +85,7 @@ class SpaceShooterGame: Game {
             let bullet = Bullet(x: player.centerX, y: player.centerY)
             bullets.append(bullet)
             player.shoot()
+            shootSound?.play(volume: 0.4)
         }
 
         // Update bullets
@@ -102,6 +114,7 @@ class SpaceShooterGame: Game {
                     Explosion(
                         x: enemies[i].x + enemies[i].width / 2,
                         y: enemies[i].y + enemies[i].height / 2))
+                explosionSound?.play(volume: 0.8)
                 loseLife()
             }
         }
@@ -123,6 +136,7 @@ class SpaceShooterGame: Game {
                         Explosion(
                             x: enemies[i].x + enemies[i].width / 2,
                             y: enemies[i].y + enemies[i].height / 2))
+                    explosionSound?.play(volume: 0.8)
 
                     // Score
                     score += 100 * wave

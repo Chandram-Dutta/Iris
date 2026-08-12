@@ -88,6 +88,7 @@ public class Engine {
     public func stop() {
         isRunning = false
         game = nil
+        Audio.stopAll()
     }
 
     private func updateDebugInfo(deltaTime: Double) {

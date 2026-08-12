@@ -21,6 +21,8 @@ Graphics              // Drawing: clear, fillRect, drawImage, drawText
 Color                 // RGBA (Float 0-1)
 Image                 // Image.load("path.png")
 Font                  // Font.system(size: 16)
+Sound                 // Sound.load("shoot.wav")?.play()
+Music                 // Music.load("theme.wav")?.play(loop: true), Music.stop()
 Input                 // Input.shared.isKeyDown(.space)
 Key                   // .left, .right, .up, .down, .w, .a, .s, .d, .space, .escape
 DebugInfo             // fps, deltaTime, frameNumber
@@ -62,6 +64,7 @@ main()
 | Situation | Behavior |
 |-----------|----------|
 | Missing image file | Returns nil, logs warning |
+| Missing audio file | Returns nil, logs warning |
 | Drawing outside screen | Allowed (GPU clips) |
 | Double-loading assets | Returns cached handle |
 

@@ -24,7 +24,7 @@ class Player {
         self.screenHeight = screenHeight
         self.x = screenWidth / 2 - width / 2
         self.y = screenHeight - height - 40
-        self.image = Image.load(GameResources.imagePath("spaceship.png"))
+        self.image = Image.load(GameResources.path("spaceship.png"))
 
         // Generate hitbox from image transparency or use fallback AABB
         if let img = image, let generatedHitbox = img.generateHitbox() {

@@ -1,7 +1,7 @@
 import Foundation
 
 enum GameResources {
-    static func imagePath(_ named: String) -> String {
+    static func path(_ named: String) -> String {
         // Try Bundle.module first (SPM resources)
         if let url = Bundle.module.url(
             forResource: named, withExtension: nil, subdirectory: "Resources")

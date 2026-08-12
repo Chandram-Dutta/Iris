@@ -16,7 +16,7 @@ class Explosion {
         self.y = y
 
         if Explosion.image == nil {
-            Explosion.image = Image.load(GameResources.imagePath("explosion.png"))
+            Explosion.image = Image.load(GameResources.path("explosion.png"))
         }
     }
 
