@@ -1,5 +1,4 @@
 import Iris
-import SpaceShooterSupport
 
 class SpaceShooterGame: Game {
     let screenWidth: Float = 800

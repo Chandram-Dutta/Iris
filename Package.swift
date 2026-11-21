@@ -27,7 +27,6 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(path: "Examples/SpaceShooterSupport"),
         .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.3.0")
     ],
     targets: [
@@ -52,7 +51,7 @@ let package = Package(
         ),
         .executableTarget(
             name: "SpaceShooter",
-            dependencies: ["Iris", "SpaceShooterSupport"],
+            dependencies: ["Iris"],
             path: "Examples/SpaceShooter",
             exclude: ["README.md"],
             resources: [.copy("Resources")]
@@ -60,6 +59,10 @@ let package = Package(
         .testTarget(
             name: "IrisTests",
             dependencies: ["Iris"]
+        ),
+        .testTarget(
+            name: "SpaceShooterTests",
+            dependencies: ["SpaceShooter"]
         ),
     ]
 )

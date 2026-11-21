@@ -1,5 +1,5 @@
 import XCTest
-@testable import SpaceShooterSupport
+@testable import SpaceShooter
 
 final class PauseToggleTests: XCTestCase {
     func testDistinctPressesTogglePause() {
