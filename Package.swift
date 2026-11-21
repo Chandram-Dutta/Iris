@@ -60,5 +60,9 @@ let package = Package(
             name: "IrisTests",
             dependencies: ["Iris"]
         ),
+        .testTarget(
+            name: "SpaceShooterTests",
+            dependencies: ["SpaceShooter"]
+        ),
     ]
 )

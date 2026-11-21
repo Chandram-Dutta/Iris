@@ -14,7 +14,8 @@ class SpaceShooterGame: Game {
     var highScore: Int = 0
     var lives: Int = 3
     var isGameOver: Bool = false
-    var isPaused: Bool = false
+    private var pauseToggle = PauseToggle()
+    var isPaused: Bool { pauseToggle.isPaused }
 
     // Enemy spawning
     var enemySpawnTimer: Double = 0
@@ -52,8 +53,7 @@ class SpaceShooterGame: Game {
         }
 
         // Pause toggle
-        if Input.shared.isKeyDown(.escape) {
-            isPaused.toggle()
+        if pauseToggle.update(isKeyDown: Input.shared.isKeyDown(.escape)) {
             if isPaused {
                 Music.pause()
             } else {
@@ -355,7 +355,7 @@ class SpaceShooterGame: Game {
         enemySpawnRate = 1.5
         enemySpawnTimer = 0
         isGameOver = false
-        isPaused = false
+        pauseToggle = PauseToggle()
     }
 
     func checkCollision(
