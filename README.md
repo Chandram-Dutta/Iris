@@ -36,7 +36,7 @@ DebugInfo             // fps, deltaTime, frameNumber
 import Iris
 
 class MyGame: Game {
-    func update(deltaTime: TimeInterval, debug: DebugInfo) {
+    func update(deltaTime: Double, debug: DebugInfo) {
         // game logic here
     }
     
