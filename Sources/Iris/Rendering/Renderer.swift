@@ -22,7 +22,9 @@
         private var currentBlendMode: BlendMode = .normal
 
         private struct PipelineKey: Hashable {
-            enum Kind { case color, texture, text, circle, strokeCircle, gradient }
+            enum Kind {
+                case color, texture, text, circle, strokeCircle, gradientLinear, gradientRadial
+            }
             let kind: Kind
             let blendMode: BlendMode
         }
@@ -254,31 +256,46 @@
 
                 struct GradientVertexOut {
                     float4 position [[position]];
-                    float2 texCoord;
+                    float2 localPosition;
                     float4 color1;
                     float4 color2;
+                };
+
+                // Linear: (startX, startY, endX, endY). Radial: (centerX, centerY, radius, unused).
+                // All in the same untransformed space as the rect, so the current
+                // transform rotates and scales the gradient along with its geometry.
+                struct GradientParams {
+                    float4 geometry;
                 };
 
                 vertex GradientVertexOut vertex_gradient(GradientVertexIn in [[stage_in]], constant float4x4 &matrix [[buffer(1)]]) {
                     GradientVertexOut out;
                     out.position = matrix * float4(in.position, 0.0, 1.0);
-                    out.texCoord = in.texCoord;
+                    out.localPosition = in.position;
                     out.color1 = in.color1;
                     out.color2 = in.color2;
                     return out;
                 }
 
-                fragment float4 fragment_gradient_linear(GradientVertexOut in [[stage_in]]) {
-                    // Linear gradient along U axis
-                    return mix(in.color1, in.color2, in.texCoord.x);
+                fragment float4 fragment_gradient_linear(GradientVertexOut in [[stage_in]], constant GradientParams &params [[buffer(0)]]) {
+                    float2 start = params.geometry.xy;
+                    float2 axis = params.geometry.zw - start;
+                    float axisLengthSquared = dot(axis, axis);
+                    if (axisLengthSquared <= 0.0) {
+                        return in.color1; // Degenerate gradient: start and end coincide.
+                    }
+                    float t = clamp(dot(in.localPosition - start, axis) / axisLengthSquared, 0.0, 1.0);
+                    return mix(in.color1, in.color2, t);
                 }
 
-                fragment float4 fragment_gradient_radial(GradientVertexOut in [[stage_in]]) {
-                    // Radial gradient from center
-                    float2 center = float2(0.5, 0.5);
-                    float dist = distance(in.texCoord, center) * 2.0; // Normalized to 0-1
-                    dist = clamp(dist, 0.0, 1.0);
-                    return mix(in.color1, in.color2, dist);
+                fragment float4 fragment_gradient_radial(GradientVertexOut in [[stage_in]], constant GradientParams &params [[buffer(0)]]) {
+                    float2 center = params.geometry.xy;
+                    float radius = params.geometry.z;
+                    if (radius <= 0.0) {
+                        return in.color1; // Degenerate gradient: no extent to fade over.
+                    }
+                    float t = clamp(distance(in.localPosition, center) / radius, 0.0, 1.0);
+                    return mix(in.color1, in.color2, t);
                 }
                 """
 
@@ -295,7 +312,8 @@
                 (.text, "vertex_text", "fragment_text"),
                 (.circle, "vertex_circle", "fragment_circle"),
                 (.strokeCircle, "vertex_stroke_circle", "fragment_stroke_circle"),
-                (.gradient, "vertex_gradient", "fragment_gradient_linear"),
+                (.gradientLinear, "vertex_gradient", "fragment_gradient_linear"),
+                (.gradientRadial, "vertex_gradient", "fragment_gradient_radial"),
             ]
 
             let blendModes: [BlendMode] = [.normal, .additive, .multiply]
@@ -367,7 +385,7 @@
                         vertexDescriptor.attributes[3].offset = 32
                         vertexDescriptor.attributes[3].bufferIndex = 0
                         vertexDescriptor.layouts[0].stride = 36
-                    case .gradient:
+                    case .gradientLinear, .gradientRadial:
                         vertexDescriptor.attributes[0].format = .float2  // pos
                         vertexDescriptor.attributes[0].offset = 0
                         vertexDescriptor.attributes[0].bufferIndex = 0
@@ -783,20 +801,29 @@
             encoder: MTLRenderCommandEncoder, x: Float, y: Float, width: Float, height: Float,
             gradient: Gradient, transform: matrix_float4x4, projection: matrix_float4x4
         ) {
-            guard
-                let pipeline = pipelineStates[
-                    PipelineKey(kind: .gradient, blendMode: currentBlendMode)]
-            else { return }
-
-            let (c1, c2): (Color, Color)
+            // `geometry` is consumed by GradientParams in the shader source:
+            // linear takes both endpoints, radial takes a center plus a radius.
+            let kind: PipelineKey.Kind
+            let c1: Color
+            let c2: Color
+            var geometry: SIMD4<Float>
             switch gradient {
-            case .linear(_, _, _, _, let startColor, let endColor):
+            case .linear(let startX, let startY, let endX, let endY, let startColor, let endColor):
+                kind = .gradientLinear
                 c1 = startColor
                 c2 = endColor
-            case .radial(_, _, _, let innerColor, let outerColor):
+                geometry = SIMD4<Float>(startX, startY, endX, endY)
+            case .radial(let centerX, let centerY, let radius, let innerColor, let outerColor):
+                kind = .gradientRadial
                 c1 = innerColor
                 c2 = outerColor
+                geometry = SIMD4<Float>(centerX, centerY, radius, 0)
             }
+
+            guard
+                let pipeline = pipelineStates[
+                    PipelineKey(kind: kind, blendMode: currentBlendMode)]
+            else { return }
 
             let vertices: [Float] = [
                 x, y + height, 0.0, 1.0, c1.r, c1.g, c1.b, c1.a, c2.r, c2.g, c2.b, c2.a,
@@ -817,6 +844,8 @@
             encoder.setRenderPipelineState(pipeline)
             encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
             encoder.setVertexBytes(&mvp, length: MemoryLayout<matrix_float4x4>.size, index: 1)
+            encoder.setFragmentBytes(
+                &geometry, length: MemoryLayout<SIMD4<Float>>.stride, index: 0)
             encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6)
         }
 
