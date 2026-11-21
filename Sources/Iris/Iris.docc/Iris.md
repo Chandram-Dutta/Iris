@@ -20,20 +20,23 @@ To create your first game, define a class that conforms to the ``Game`` protocol
 ```swift
 import Iris
 
-class HelloWorld: Game {
-    func update(deltaTime: TimeInterval, debug: DebugInfo) {
-        // Logic here
+class MyGame: Game {
+    func update(deltaTime: Double, debug: DebugInfo) {
+        // game logic here
     }
     
     func draw(_ g: Graphics, debug: DebugInfo) {
-        g.clear(.black)
-        g.drawText("Hello World", x: 10, y: 10, font: .system(size: 20), color: .white)
+        g.clear(Color(r: 0.1, g: 0.1, b: 0.2))
+        g.fillRect(x: 100, y: 100, width: 50, height: 50, color: .red)
+        g.drawText("Hello Iris", x: 100, y: 200, font: Font.system(size: 24), color: .white)
     }
 }
 
 @MainActor func main() {
-    Engine().run(game: HelloWorld())
+    Engine().run(game: MyGame())
 }
+
+main()
 ```
 
 ## Topics
