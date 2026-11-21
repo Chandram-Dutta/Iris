@@ -43,6 +43,15 @@ struct PolygonTriangulator {
         var indices: [Int] = []
         var availableIndices = Array(0..<points.count)
 
+        let signedArea = points.indices.reduce(Float.zero) { area, i in
+            let current = points[i]
+            let next = points[(i + 1) % points.count]
+            return area + current.x * next.y - next.x * current.y
+        }
+        if signedArea < 0 {
+            availableIndices.reverse()
+        }
+
         while availableIndices.count > 3 {
             var earFound = false
 
