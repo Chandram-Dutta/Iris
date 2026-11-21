@@ -1,6 +1,8 @@
 # Iris
 
-![Space Shooter Demo](Assets/space_shooter.mov)
+![Space Shooter Demo](Assets/space_shooter.gif)
+
+[Watch the full-quality video](Assets/space_shooter.mov)
 
 A minimal 2D game engine in Swift.
 
