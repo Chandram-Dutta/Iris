@@ -9,6 +9,14 @@ struct PolygonTriangulatorTests {
     }
 
     @Test(arguments: [false, true])
+    func offsetSquare(clockwise: Bool) {
+        let points: [SIMD2<Float>] = [
+            [20000, 20000.5], [20005, 20000.5], [20005, 20005.5], [20000, 20005.5],
+        ]
+        checkTriangulation(clockwise ? Array(points.reversed()) : points, expectedArea: 25)
+    }
+
+    @Test(arguments: [false, true])
     func concavePolygon(clockwise: Bool) {
         let points: [SIMD2<Float>] = [[0, 0], [3, 0], [3, 1], [1, 1], [1, 3], [0, 3]]
         checkTriangulation(clockwise ? Array(points.reversed()) : points)
@@ -20,7 +28,7 @@ struct PolygonTriangulatorTests {
         #expect(PolygonTriangulator.triangulate([[0, 0], [1, 0]]).isEmpty)
     }
 
-    private func checkTriangulation(_ points: [SIMD2<Float>]) {
+    private func checkTriangulation(_ points: [SIMD2<Float>], expectedArea: Float? = nil) {
         let indices = PolygonTriangulator.triangulate(points)
         #expect(indices.count == (points.count - 2) * 3)
 
@@ -38,6 +46,6 @@ struct PolygonTriangulatorTests {
             let b = points[(i + 1) % points.count]
             signedArea += a.x * b.y - b.x * a.y
         }
-        #expect(abs(triangleArea - abs(signedArea) / 2) < 0.0001)
+        #expect(abs(triangleArea - (expectedArea ?? abs(signedArea) / 2)) < 0.0001)
     }
 }
